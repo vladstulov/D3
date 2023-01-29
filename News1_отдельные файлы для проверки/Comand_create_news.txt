@@ -3,3 +3,114 @@ News.objects.create(title='Капибары в подмосковных леса
 News.objects.create(title='К земле приближается fuckin комета', text='Как известно с древности - приближение кометы к Земле - недобрый знак. На периоды приближения комет к Земле в истории приходятся весьма и весьма shit неблагоприятные для человечества события, такие как войны, эпидемии, засуха, наводнения и т.п. И как известно даже, что существует теория занесения биологической жизни на нашу планету в виде цепочек ДНК с других планет - вот уж действительно недобрый знак для нашей матери Земли.')
 
 News.objects.create(title='Зима близко', text='Как сообщают британские ученые зима в этом году будет особенно fuckin shit холодной. Ученые связывают это с глобальным потеплением вызванным деятельностью человека на планете. Но на самом деле они ничего об этом не знают. На самом деле это всё из-за того что это ты плохо себя ведешь, ленишься и не стремишься к личностному росту')
+
+
+py manage.py startapp newapp
+py manage.py makemigrations
+py manage.py migrate
+
+py manage.py shell
+from newapp.models import *
+
+
+
+urls newsapp:
+from django.urls import path
+from .views import NewsList, NewsDetail
+
+urlpatterns = [
+   path('', NewsList.as_view()),
+   path('<int:pk>', NewsDetail.as_view()),
+]
+
+
+project urls:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('news/', include('newsapp.urls')),
+]
+
+Зарегать в админке проекта:
+from django.contrib import admin
+from .models import News
+admin.site.register(News)
+
+Кастомные фильтры в папку templatetags в созданом приложении
+
+в сеттингс указать создаваемое приложение, и прописать путь
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
+Вот это после инсталледаппс можно указать: SITE_ID = 1
+После сделать миграции
+
+И последнее:
+там же в папке templates положить default.html:
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Bare - Start Bootstrap Template</title>
+        <!-- Favicon-->
+        <!--link rel="icon" type="image/x-icon" href="assets/favicon.ico" /-->
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <!--link href="css/styles.css" rel="stylesheet" /-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+   <div class="container">
+       <a class="navbar-brand" href="#">Django flatpages</a>
+       <button class="navbar-toggler" type="button" data-toggle="collapse"
+               data-target="#navbarResponsive"
+               aria-controls="navbarResponsive" aria-expanded="false"
+               aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+       </button>
+       <div class="collapse navbar-collapse" id="navbarResponsive">
+           <ul class="navbar-nav ml-auto">
+               <li class="nav-item active">
+                   <a class="nav-link" href="#">Home
+                       <span class="sr-only">(current)</span>
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a class="nav-link" href="/about/">About</a>
+               </li>
+               <li class="nav-item">
+                   <a class="nav-link" href="/contacts/">Contact</a>
+               </li>
+           </ul>
+       </div>
+   </div>
+</nav>
+        <!-- Page content-->
+<!--        <div class="container">-->
+<!--            <div class="text-center mt-5">-->
+<!--                <h1>A Bootstrap 5 Starter Template</h1>-->
+<!--                <p class="lead">A complete project boilerplate built with Bootstrap</p>-->
+<!--                <p>Bootstrap v5.1.3</p>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="container">
+   <div class="row">
+       <div class="col-lg-12 text-center">
+           {% block content %}
+           {{ flatpage.content }}
+           {% endblock content %}
+       </div>
+   </div>
+</div>
+        <!-- Bootstrap core JS-->
+        <!--script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script-->
+        <!-- Core theme JS-->
+        <!--script-- src="js/scripts.js"></script-->
+    </body>
+</html>
+
